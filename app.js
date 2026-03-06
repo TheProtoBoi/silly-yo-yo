@@ -1,26 +1,29 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-// player
+// Player setup
 let player = {
   x: 150,
-  y: 320,
+  y: 300,
   size: 40,
   velocityY: 0,
   jumping: false
 };
 
-let gravity = 0.9;
-let ground = 360;
+const gravity = 1;
+const ground = 350;
 
-// obstacles
+// Obstacles
 let obstacles = [
-  { x: 900, y: 330, w: 40, h: 30 }
+  { x: 800, y: ground - 40, w: 40, h: 40 }
 ];
 
-function update() {
+// Game speed
+let speed = 6;
 
-  // gravity
+// Update game state
+function update() {
+  // Apply gravity
   player.velocityY += gravity;
   player.y += player.velocityY;
 
@@ -30,59 +33,60 @@ function update() {
     player.jumping = false;
   }
 
+  // Move obstacles
   obstacles.forEach(o => {
-
-    o.x -= 6;
+    o.x -= speed;
 
     if (o.x + o.w < 0) {
       o.x = canvas.width + Math.random() * 300;
     }
 
-    // collision
+    // Collision detection
     if (
       player.x < o.x + o.w &&
       player.x + player.size > o.x &&
       player.y < o.y + o.h &&
       player.y + player.size > o.y
     ) {
-      alert("Game Over");
+      alert("Game Over!");
       location.reload();
     }
-
   });
 }
 
+// Draw game objects
 function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  // ground
+  // Draw ground
   ctx.fillStyle = "white";
   ctx.fillRect(0, ground, canvas.width, 5);
 
-  // player
+  // Draw player
   ctx.fillStyle = "cyan";
   ctx.fillRect(player.x, player.y, player.size, player.size);
 
-  // obstacles
+  // Draw obstacles
   ctx.fillStyle = "red";
-  obstacles.forEach(o=>{
-    ctx.fillRect(o.x,o.y,o.w,o.h);
+  obstacles.forEach(o => {
+    ctx.fillRect(o.x, o.y, o.w, o.h);
   });
-
 }
 
-function loop(){
+// Game loop
+function loop() {
   update();
   draw();
   requestAnimationFrame(loop);
 }
 
-document.addEventListener("keydown", e=>{
-  if(e.code==="Space" && !player.jumping){
-    player.velocityY = -15;
+// Jump control
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" && !player.jumping) {
+    player.velocityY = -18;
     player.jumping = true;
   }
 });
 
+// Start game
 loop();
