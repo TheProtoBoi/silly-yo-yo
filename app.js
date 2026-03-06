@@ -1,7 +1,16 @@
+// Page style
+document.body.style.margin = "0";
+document.body.style.background = "#111";
+document.body.style.display = "flex";
+document.body.style.justifyContent = "center";
+document.body.style.alignItems = "center";
+document.body.style.height = "100vh";
+
 // Create canvas
 const canvas = document.createElement("canvas");
 canvas.width = 800;
 canvas.height = 300;
+canvas.style.background = "#222";
 document.body.appendChild(canvas);
 
 const ctx = canvas.getContext("2d");
@@ -22,10 +31,7 @@ let obstacles = [
   { x: 600, y: 220, w: 30, h: 50 }
 ];
 
-// Game update
 function update() {
-
-  // gravity
   player.velocityY += gravity;
   player.y += player.velocityY;
 
@@ -35,7 +41,6 @@ function update() {
     player.jumping = false;
   }
 
-  // move obstacles
   obstacles.forEach(o => {
     o.x -= 5;
 
@@ -43,7 +48,6 @@ function update() {
       o.x = canvas.width + Math.random() * 200;
     }
 
-    // collision
     if (
       player.x < o.x + o.w &&
       player.x + player.size > o.x &&
@@ -56,35 +60,32 @@ function update() {
   });
 }
 
-// Draw game
 function draw() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // ground
-  ctx.fillStyle = "black";
-  ctx.fillRect(0,250,canvas.width,5);
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 250, canvas.width, 5);
 
   // player
-  ctx.fillStyle = "blue";
-  ctx.fillRect(player.x,player.y,player.size,player.size);
+  ctx.fillStyle = "cyan";
+  ctx.fillRect(player.x, player.y, player.size, player.size);
 
   // obstacles
   ctx.fillStyle = "red";
-  obstacles.forEach(o=>{
-    ctx.fillRect(o.x,o.y,o.w,o.h);
+  obstacles.forEach(o => {
+    ctx.fillRect(o.x, o.y, o.w, o.h);
   });
 }
 
-// Game loop
-function loop(){
+function loop() {
   update();
   draw();
   requestAnimationFrame(loop);
 }
 
-// Jump control
-document.addEventListener("keydown",e=>{
-  if(e.code==="Space" && !player.jumping){
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" && !player.jumping) {
     player.velocityY = -12;
     player.jumping = true;
   }
