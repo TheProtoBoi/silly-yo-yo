@@ -1,20 +1,12 @@
-// Obstacles array
-const obstacles = [
-  { x: 800, y: 310, w: 40, h: 40 }
-];
+// Base obstacle array
+let obstacles = [];
+let gameSpeed = 6;
 
-const gameSpeed = 6;
-
-// Update obstacles
-function updateObstacles(canvas, player) {
+// Update obstacles and detect collisions
+function updateObstacles() {
   obstacles.forEach(o => {
     o.x -= gameSpeed;
 
-    if (o.x + o.w < 0) {
-      o.x = canvas.width + Math.random() * 300;
-    }
-
-    // Collision with player
     if (
       player.x < o.x + o.w &&
       player.x + player.size > o.x &&
@@ -32,5 +24,18 @@ function drawObstacles(ctx) {
   ctx.fillStyle = "red";
   obstacles.forEach(o => {
     ctx.fillRect(o.x, o.y, o.w, o.h);
+  });
+
+  // draw spikes
+  ctx.fillStyle = "yellow";
+  obstacles.forEach(o => {
+    if (o.type === "spike") {
+      ctx.beginPath();
+      ctx.moveTo(o.x, o.y + o.h);
+      ctx.lineTo(o.x + o.w/2, o.y);
+      ctx.lineTo(o.x + o.w, o.y + o.h);
+      ctx.closePath();
+      ctx.fill();
+    }
   });
 }
