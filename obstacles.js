@@ -6,7 +6,7 @@ const obstacles = [
 const gameSpeed = 6;
 
 // Update obstacles
-function updateObstacles() {
+function updateObstacles(canvas, player) {
   obstacles.forEach(o => {
     o.x -= gameSpeed;
 
