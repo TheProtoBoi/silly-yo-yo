@@ -11,7 +11,7 @@ function drawGround() {
 function loop() {
   // Update
   updatePlayer();
-  updateObstacles();
+  updateObstacles(canvas, player);
 
   // Draw
   ctx.clearRect(0, 0, canvas.width, canvas.height);
